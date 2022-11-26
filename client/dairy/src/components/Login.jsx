@@ -1,6 +1,6 @@
 import React from 'react'
 import { useState } from 'react'
-import DairyCards from './DairyCards'
+// import DairyCards from './DairyCards'
 import { useNavigate } from "react-router-dom";
 const Login = () => {
     const [message, setMessage] = useState("")

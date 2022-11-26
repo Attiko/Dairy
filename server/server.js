@@ -1,39 +1,56 @@
 const express = require("express")
+
+const mongoose = require('mongoose');
 const app = express()
+var cors = require('cors');
+app.use(cors());
+const bodyParser = require('body-parser');
+app.use(bodyParser.urlencoded({extended: true}));
 
+// creating connection to mongoDB database
+mongoose.connect('mongodb://127.0.0.1:27017/dairyDB');
 
-const { MongoClient } = require("mongodb");
-
-// Connection URI
-const uri =
-  "mongodb://localhost:27017/?maxPoolSize=20&w=majority";
-
-// Create a new MongoClient
-const client = new MongoClient(uri);
-
-async function run() {
-  try {
-    // Connect the client to the server (optional starting in v4.7)
-    await client.connect();
-
-    // Establish and verify connection
-   const db = await client.db("userData").command({ ping: 1 });
-    console.log("Connected successfully to server");
-  } finally {
-    // Ensures that the client will close when you finish/error
-    await client.close();
-  }
+const dairySchema = {
+  title: String,
+  body: String
 }
-run().catch(console.dir);
-
-const food = { _id: 1, name: "Jollof Rice", flavour: "extremely hot", origin: "West Africa"};
-const result =  db.collection.insertOne(food);
-console.log(
-   `A document was inserted with the _id: ${result.insertedId}`,
-);
+const Dairy = mongoose.model('dairy', dairySchema);
+// Ending of the connection
 
 
+//send request over to react
+app.get("/api", (req,res)=>{
+  res.json({"users": ["userOne", "userTwo", "userThree", "userFour","userFive"]})
+  })
 
-app.listen(4001, (req, res)=>{
-console.log("API listening at port 4001");
+  app.post('/home', (req, res) =>{
+    req.body.title;
+    req.body.content;
+
+  })
+
+//send default value over to mongo database
+// const dairyTest = new Dairy({
+//   title: "I'm feeling nervous",
+//   body: "I'm feeling this way because of my technical interviews next week, im so scared"
+// })
+// dairyTest.save(()=>(
+//   console.log("log has been saved")
+// ))
+// end of sending a hardcoded data
+
+//Making a post request from react to the database
+app.post((req, res)=>{
+
+})
+
+
+
+
+
+
+
+
+app.listen(4000, (req, res)=>{
+console.log("API listening at port 4000");
 })
